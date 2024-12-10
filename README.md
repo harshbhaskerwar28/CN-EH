@@ -8,23 +8,34 @@
 #include <string.h>
 
 int main() {
-    char in[100], out[200];
-    int i, j = 0;
+    int n, j = 0;
+    printf("Enter Size of the String - ");
+    scanf("%d", &n);
 
-    printf("Enter the input string: ");
-    scanf("%s", in);
+    char input[n + 1], start_delimiter, end_delimiter, output[2 * n + 1];
+    printf("Enter the String - ");
+    scanf("%s", input);
 
-    out[j++] = 'F';  // Starting Flag
-    for (i = 0; in[i] != '\0'; i++) {
-        if (in[i] == 'F' || in[i] == 'E') {
-            out[j++] = 'E';  // Escape character
+    printf("Enter the Start Delimiter: ");
+    scanf(" %c", &start_delimiter);
+
+    printf("Enter the End Delimiter: ");
+    scanf(" %c", &end_delimiter);
+
+    output[j++] = start_delimiter; // Add start delimiter
+
+    for (int i = 0; i < n; i++) {
+        if (input[i] == start_delimiter || input[i] == end_delimiter) {
+            output[j++] = start_delimiter; // Add extra start delimiter for escape
         }
-        out[j++] = in[i];
+        output[j++] = input[i]; // Add the current character
     }
-    out[j++] = 'F';  // Ending Flag
-    out[j] = '\0';
 
-    printf("Byte Stuffed Output: %s\n", out);
+    output[j++] = end_delimiter; // Add end delimiter
+    output[j] = '\0';            // Null-terminate the output string
+
+    printf("The Final String After Character Stuffing = %s\n", output);
+
     return 0;
 }
 ```
@@ -34,33 +45,38 @@ int main() {
 ### **2. Bit Stuffing**  
 ```c
 #include <stdio.h>
-#include <string.h>
 
 int main() {
-    char in[100], out[200];
-    int i, j = 0, cnt = 0;
+    int a[20], b[30], n, i, j = 0, count = 0;
 
-    printf("Enter the input bit stream: ");
-    scanf("%s", in);  
+    printf("Enter frame size (Example: 8): ");
+    scanf("%d", &n);
 
-    for (i = 0; in[i] != '\0'; i++) {
-        out[j++] = in[i];
-        if (in[i] == '1') {
-            cnt++;
-            if (cnt == 5) {
-                out[j++] = '0'; 
-                cnt = 0;
+    printf("Enter the frame in the form of 0 and 1: ");
+    for (i = 0; i < n; i++) {
+        scanf("%d", &a[i]);
+    }
+
+    for (i = 0; i < n; i++) {
+        b[j++] = a[i];
+        if (a[i] == 1) {
+            count++;
+            if (count == 5) {
+                b[j++] = 0; // Add a 0 after five consecutive 1s
+                count = 0;
             }
         } else {
-            cnt = 0;
+            count = 0;
         }
     }
-    out[j] = '\0';
 
-    printf("Bit Stuffed Output: %s\n", out);
+    printf("After Bit Stuffing: ");
+    for (i = 0; i < j; i++) {
+        printf("%d", b[i]);
+    }
+    printf("\n");
+
     return 0;
-}
-
 }
 ```
 
