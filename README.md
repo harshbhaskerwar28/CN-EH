@@ -131,3 +131,116 @@ int main() {
 ```
 
 ---
+
+### **Distance Vector Routing**  
+```c
+#include <stdio.h>
+
+int main() {
+    int c[10][10], d[10], n, i, j, k, v[10], src;
+
+    printf("Enter the number of nodes: ");
+    scanf("%d", &n);
+
+    printf("Enter the cost matrix:\n");
+    for (i = 0; i < n; i++)
+        for (j = 0; j < n; j++)
+            scanf("%d", &c[i][j]);
+
+    printf("Enter the source node: ");
+    scanf("%d", &src);
+
+    for (i = 0; i < n; i++) {
+        d[i] = c[src][i];
+        v[i] = 0;
+    }
+
+    v[src] = 1;
+
+    for (i = 1; i < n; i++) {
+        int min = 999, u;
+
+        for (j = 0; j < n; j++)
+            if (!v[j] && d[j] < min) {
+                min = d[j];
+                u = j;
+            }
+
+        v[u] = 1;
+
+        for (k = 0; k < n; k++)
+            if (!v[k] && d[u] + c[u][k] < d[k])
+                d[k] = d[u] + c[u][k];
+    }
+
+    printf("Shortest distances from node %d:\n", src);
+    for (i = 0; i < n; i++)
+        printf("To node %d: %d\n", i, d[i]);
+
+    return 0;
+}
+```
+
+---
+
+### **File Control Protocol**
+### **a. Sliding Window Protocol**  
+```c
+#include <stdio.h>
+
+int main() {
+    int n, w, s = 0, i;
+
+    printf("Enter number of frames: ");
+    scanf("%d", &n);
+
+    printf("Enter window size: ");
+    scanf("%d", &w);
+
+    while (s < n) {
+        printf("Sending frames: ");
+        for (i = s; i < s + w && i < n; i++)
+            printf("%d ", i + 1);
+
+        printf("\nAcknowledged up to frame %d\n", s + w);
+        s += w;
+    }
+
+    return 0;
+}
+```
+
+---
+
+### **b. Stop-and-Wait Protocol (with Internet Check Simulation)**  
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+int main() {
+    int n, i, ack;
+
+    printf("Enter number of frames: ");
+    scanf("%d", &n);
+
+    srand(time(0));
+
+    for (i = 1; i <= n; i++) {
+        printf("Sending frame %d\n", i);
+
+        ack = rand() % 2;  // Random success or failure
+
+        if (ack) {
+            printf("Acknowledgment received for frame %d\n", i);
+        } else {
+            printf("No acknowledgment, resending frame %d\n", i);
+            i--;  // Resend the same frame
+        }
+    }
+
+    return 0;
+}
+```
+
+---
