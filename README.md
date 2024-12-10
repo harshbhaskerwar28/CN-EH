@@ -170,69 +170,62 @@ No Error Detected!
 ```c
 #include <stdio.h>
 #include <limits.h>
+#define N 10
+#define INF INT_MAX
 
-int main() {
-    int n;
-    printf("Enter the number of nodes: ");
-    scanf("%d", &n);
-
-    int a[n][n], d[n][n], v[n][n];
-
-    printf("Enter the cost matrix (-1 for infinity):\n");
+void dvr(int c[N][N], int n) {
+    int d[N], v[N];
     for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            scanf("%d", &a[i][j]);
-            if (a[i][j] == -1 && i != j) {
-                d[i][j] = INT_MAX;
-                v[i][j] = -1;
-            } else {
-                d[i][j] = a[i][j];
-                v[i][j] = i;
-            }
-        }
+        d[i] = c[0][i];
+        v[i] = (d[i] != INF && i != 0) ? i : -1;
     }
-
     for (int k = 0; k < n; k++) {
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if (d[i][j] > d[i][k] + d[k][j] && d[i][k] != INT_MAX && d[k][j] != INT_MAX) {
-                    d[i][j] = d[i][k] + d[k][j];
-                    v[i][j] = v[k][j];
-                }
+            if (d[i] > c[0][k] + c[k][i] && c[0][k] != INF && c[k][i] != INF) {
+                d[i] = c[0][k] + c[k][i];
+                v[i] = k;
             }
         }
     }
-
-    printf("Node Distance Via\n");
+    printf("Node\tDist\tVia\n");
     for (int i = 0; i < n; i++) {
-        printf("%d ", i);
-        for (int j = 0; j < n; j++) {
-            if (d[i][j] == INT_MAX) {
-                printf("-1 ");
-            } else {
-                printf("%d ", d[i][j]);
-            }
-        }
-        printf("\n");
+        if (d[i] == INF)
+            printf("%d\tINF\t-\n", i);
+        else
+            printf("%d\t%d\t%d\n", i, d[i], v[i]);
     }
+}
 
+int main() {
+    int n, c[N][N];
+    printf("Enter number of nodes: ");
+    scanf("%d", &n);
+    printf("Enter cost matrix (-1 for INF):\n");
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++) {
+            scanf("%d", &c[i][j]);
+            if (c[i][j] == -1)
+                c[i][j] = INF;
+        }
+    dvr(c, n);
     return 0;
 }
 ```
 
 **Sample Output:**
 ```
-Enter the number of nodes: 4
-Enter the cost matrix (-1 for infinity):
+Enter number of nodes: 4
+Enter cost matrix (-1 for INF):
 0 2 -1 1
 2 0 3 -1
 -1 3 0 -1
 1 -1 -1 0
-Node Distance Via
-0 0 2 4 1 
-1 2 0 3 3 
-2 4 3 0 5 
-3 1 -1 -1 0 
+Node    Dist    Via
+0       0       -
+1       2       1
+2       4       1
+3       1       3
+
 ```
 
 ---
