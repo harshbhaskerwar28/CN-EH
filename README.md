@@ -73,12 +73,12 @@ int main() {
 
 void crc(char d[], char g[], char res[]) {
     int i, j, dl = strlen(d), gl = strlen(g);
-
     strcpy(res, d);
+
     for (i = 0; i <= dl - gl; i++) {
         if (res[i] == '1') {
             for (j = 0; j < gl; j++) {
-                res[i + j] = res[i + j] == g[j] ? '0' : '1';  // XOR operation
+                res[i + j] = (res[i + j] == g[j]) ? '0' : '1'; 
             }
         }
     }
@@ -89,32 +89,24 @@ int main() {
     int i;
 
     printf("Enter data bits: ");
-    scanf("%s", d);
+    scanf("%s", d);  // Read data bits
 
     printf("Enter generator bits: ");
-    scanf("%s", g);
+    scanf("%s", g);  // Read generator bits
 
     int dl = strlen(d), gl = strlen(g);
     strcpy(code, d);
 
-    // Append zero bits
-    for (i = 0; i < gl - 1; i++) {
-        strcat(code, "0");
-    }
+    for (i = 0; i < gl - 1; i++) strcat(code, "0");  // Append zeros to the data
 
-    crc(code, g, res);
+    crc(code, g, res);  // Perform CRC division
 
-    // Extract remainder
-    for (i = dl; i < dl + gl - 1; i++) {
-        code[i] = res[i];
-    }
+    for (i = dl; i < dl + gl - 1; i++) code[i] = res[i];  // Get the remainder
 
     printf("Transmitted codeword: %s\n", code);
 
-    // Simulate receiver side
-    crc(code, g, res);
+    crc(code, g, res);  // Check for errors
 
-    // Check if remainder is zero
     int valid = 1;
     for (i = dl; i < dl + gl - 1; i++) {
         if (res[i] != '0') {
@@ -130,6 +122,7 @@ int main() {
 
     return 0;
 }
+
 ```
 
 ---
