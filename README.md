@@ -130,50 +130,71 @@ int main() {
 ### **Distance Vector Routing**  
 ```c
 #include <stdio.h>
+#include <limits.h>
+
+#define MAX_NODES 10
+
+void print_table(int n, int dist[n][n], int via[n][n]) {
+    printf("Node Distance Via\n");
+    for (int i = 0; i < n; i++) {
+        printf("%d ", i);
+        for (int j = 0; j < n; j++) {
+            if (dist[i][j] == INT_MAX)
+                printf("-1 ");  // Representing no path as -1
+            else
+                printf("%d ", dist[i][j]);
+        }
+        printf("\n");
+    }
+}
 
 int main() {
-    int c[10][10], d[10], n, i, j, k, v[10], src;
-
+    int n;
     printf("Enter the number of nodes: ");
     scanf("%d", &n);
 
-    printf("Enter the cost matrix:\n");
-    for (i = 0; i < n; i++)
-        for (j = 0; j < n; j++)
-            scanf("%d", &c[i][j]);
+    int cost[n][n], dist[n][n], via[n][n];
 
-    printf("Enter the source node: ");
-    scanf("%d", &src);
-
-    for (i = 0; i < n; i++) {
-        d[i] = c[src][i];
-        v[i] = 0;
-    }
-
-    v[src] = 1;
-
-    for (i = 1; i < n; i++) {
-        int min = 999, u;
-
-        for (j = 0; j < n; j++)
-            if (!v[j] && d[j] < min) {
-                min = d[j];
-                u = j;
+    printf("Enter the cost matrix (-1 for infinity):\n");
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            scanf("%d", &cost[i][j]);
+            if (cost[i][j] == -1 && i != j) {
+                dist[i][j] = INT_MAX;  // Representing no connection with INT_MAX
+                via[i][j] = -1;        // No intermediate node
+            } else {
+                dist[i][j] = cost[i][j];
+                via[i][j] = i;         // Direct connection uses the node itself
             }
-
-        v[u] = 1;
-
-        for (k = 0; k < n; k++)
-            if (!v[k] && d[u] + c[u][k] < d[k])
-                d[k] = d[u] + c[u][k];
+        }
     }
 
-    printf("Shortest distances from node %d:\n", src);
-    for (i = 0; i < n; i++)
-        printf("To node %d: %d\n", i, d[i]);
+    // Distance vector algorithm (Bellman-Ford style)
+    for (int k = 0; k < n; k++) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (dist[i][j] > dist[i][k] + dist[k][j] && dist[i][k] != INT_MAX && dist[k][j] != INT_MAX) {
+                    dist[i][j] = dist[i][k] + dist[k][j];
+                    via[i][j] = via[k][j];  // Update via with intermediate node
+                }
+            }
+        }
+    }
+
+    printf("Node Distance Via\n");
+    for (int i = 0; i < n; i++) {
+        printf("%d ", i);
+        if (dist[0][i] == INT_MAX) {
+            printf("-1 ");  // No path, so print -1
+        } else {
+            printf("%d ", dist[0][i]);
+        }
+        printf("%d\n", via[0][i]);
+    }
 
     return 0;
 }
+
 ```
 
 ---
