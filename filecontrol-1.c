@@ -1,5 +1,5 @@
 #include <stdio.h>
-#Sliding window
+//Sliding window
 int main() {
     int n, w, s = 0, i;
 
