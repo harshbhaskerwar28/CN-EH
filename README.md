@@ -1,4 +1,6 @@
-##CN-EH CODES
+## CN-EH CODES
+
+---
 
 ### **1. Byte Stuffing**  
 ```c
