@@ -1,42 +1,40 @@
-#include <stdio.h>
-#include <limits.h>
-#define N 10
-#define INF INT_MAX
+#include<stdio.h>
+struct node{
+    unsigned dist[20];
+    unsigned from[20];
+}rt[20];
 
-void dvr(int c[N][N], int n) {
-    int d[N], v[N];
-    for (int i = 0; i < n; i++) {
-        d[i] = c[0][i];
-        v[i] = (d[i] != INF && i != 0) ? i : -1;
-    }
-    for (int k = 0; k < n; k++) {
-        for (int i = 0; i < n; i++) {
-            if (d[i] > c[0][k] + c[k][i] && c[0][k] != INF && c[k][i] != INF) {
-                d[i] = c[0][k] + c[k][i];
-                v[i] = k;
-            }
+int main(){
+    int c[20][20];
+    int i, j ,k ,n, count=0;
+    printf("Enter the no of nodes:");
+    scanf("%d",&n);
+    printf("\n Enter the cost matrix:\n");
+    for(i=0;i<n;i++){
+        for(j=0;j<n;j++){
+            c[i][j]=0;
+            scanf("%d",&c[i][j]);
+            rt[i].dist[j] = c[i][j];
+            rt[i].from[j] = j;
         }
     }
-    printf("Node\tDist\tVia\n");
-    for (int i = 0; i < n; i++) {
-        if (d[i] == INF)
-            printf("%d\tINF\t-\n", i);
-        else
-            printf("%d\t%d\t%d\n", i, d[i], v[i]);
-    }
-}
-
-int main() {
-    int n, c[N][N];
-    printf("Enter number of nodes: ");
-    scanf("%d", &n);
-    printf("Enter cost matrix (-1 for INF):\n");
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < n; j++) {
-            scanf("%d", &c[i][j]);
-            if (c[i][j] == -1)
-                c[i][j] = INF;
+    do{
+        count=0;
+        for (i=0;i<n;i++)
+        for(j=0;j<n;j++)
+        for(k=0;k<n;k++)
+        if(rt[i].dist[j] > c[i][k] + rt[k].dist[j]){
+            rt[i].dist[j] = rt[i].dist[k]+rt[k].dist[j];
+            rt[i].from[j] = k;
+            count++;
         }
-    dvr(c, n);
-    return 0;
+    }while(count!=0);
+    
+    for(i=0;i<n;i++){
+        printf("\n\nFor router %d\n",i+1);
+        for(j=0;j<n;j++){
+            printf("\t\nnode %d via %d distance %d",j+1,rt[i].from[j]+1,rt[i].dist[j]);
+        }
+    }
+    printf("\n\n");
 }
