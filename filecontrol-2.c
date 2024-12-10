@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+
 //Stop and Wait
+
 int main() {
     int n, i, ack;
 
