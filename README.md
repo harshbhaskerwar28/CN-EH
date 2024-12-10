@@ -41,14 +41,14 @@ int main() {
     int i, j = 0, cnt = 0;
 
     printf("Enter the input bit stream: ");
-    scanf("%s", in);
+    scanf("%s", in);  
 
     for (i = 0; in[i] != '\0'; i++) {
         out[j++] = in[i];
         if (in[i] == '1') {
             cnt++;
             if (cnt == 5) {
-                out[j++] = '0';  // Stuffing a '0' after five '1's
+                out[j++] = '0'; 
                 cnt = 0;
             }
         } else {
@@ -59,6 +59,8 @@ int main() {
 
     printf("Bit Stuffed Output: %s\n", out);
     return 0;
+}
+
 }
 ```
 
